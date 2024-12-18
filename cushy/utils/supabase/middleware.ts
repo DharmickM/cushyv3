@@ -39,8 +39,10 @@ export const updateSession = async (request: NextRequest) => {
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     const user = await supabase.auth.getUser();
 
+    const protectedRoutes = ["/protected", "/accountverification"]; // Add your protected routes here
+
     // protected routes
-    if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
+    if (protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route)) && user.error) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
